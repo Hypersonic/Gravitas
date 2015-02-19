@@ -29,7 +29,7 @@ struct World {
             foreach (o; 0 .. last_ent) {
                 auto dx = xs[o] - xs[i];
                 auto dy = ys[o] - ys[i];
-                foreach (k; 0 .. veclen) {
+                foreach (k; iota(0, veclen)) {
                     auto len = sqrt(dx.array[k] * dx.array[k] + dy.array[k] * dy.array[k]);
                     if (len != 0) {
                         auto dirx = dx.array[k] / len;
