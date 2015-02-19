@@ -19,6 +19,8 @@ struct World {
     void step(float timestep = 1.0) {
         // Step everything
         foreach (i; 0 .. last_ent) {
+            axs[i] = 0;
+            ays[i] = 0;
             foreach (o; 0 .. last_ent) {
                 auto dx = xs[o] - xs[i];
                 auto dy = ys[o] - ys[i];
