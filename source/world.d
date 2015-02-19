@@ -10,15 +10,16 @@ struct World {
     static const float G = 2000f;
     static const int n_ents = 1 << 10;
     static const int veclen = 4;
+    alias vecType = float4;
     int last_ent = 0;
     int last_ent_sub = 0;
-    float4[n_ents / veclen] xs;
-    float4[n_ents / veclen] ys;
-    float4[n_ents / veclen] vxs;
-    float4[n_ents / veclen] vys;
-    float4[n_ents / veclen] axs;
-    float4[n_ents / veclen] ays;
-    float4[n_ents / veclen] masses;
+    vecType[n_ents / veclen] xs;
+    vecType[n_ents / veclen] ys;
+    vecType[n_ents / veclen] vxs;
+    vecType[n_ents / veclen] vys;
+    vecType[n_ents / veclen] axs;
+    vecType[n_ents / veclen] ays;
+    vecType[n_ents / veclen] masses;
 
     void step(float timestep = 1.0) {
         // Step everything
@@ -38,7 +39,7 @@ struct World {
                     }
                 }
             }
-            float4 ts;
+            vecType ts;
             foreach (k; 0 .. veclen) {
                 ts.array[k] = timestep;
             }
