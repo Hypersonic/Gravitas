@@ -6,6 +6,7 @@ import std.random;
 import core.simd;
 
 import gfm.sdl2;
+import gfm.math;
 
 import gravitas.world;
 
@@ -26,7 +27,7 @@ void main() {
 
     bool running = true;
     World world;
-    foreach (i; 0 .. 10) {
+    foreach (i; 0 .. 128) {
         world.push_ent(uniform(0, width), uniform(0, height), 0, 0, 0, 0, uniform(1, 10));
     }
     while (running) {
