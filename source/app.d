@@ -28,7 +28,7 @@ void main() {
     bool running = true;
     World world;
     foreach (i; 0 .. 128) {
-        world.push_ent(uniform(0, width), uniform(0, height), 0, 0, 0, 0, uniform(1, 10));
+        world.push_ent(uniform(0, width), uniform(0, height), 0, 0, 0, 0, uniform(1, 20));
     }
     while (running) {
         sdl2.processEvents();
