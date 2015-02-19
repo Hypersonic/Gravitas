@@ -36,7 +36,7 @@ void main() {
         // Draw accelerations
         renderer.setColor(128, 0, 0);
         foreach (i; 0 .. world.last_ent) {
-            foreach (k; 0 .. 4) {
+            foreach (k; 0 .. world.veclen) {
                 auto x = world.xs[i].array[k] + world.vxs[i].array[k] + world.axs[i].array[k];
                 auto y = world.ys[i].array[k] + world.vys[i].array[k] + world.ays[i].array[k];
                 if (0 < x && x < width &&
@@ -52,7 +52,7 @@ void main() {
         // Draw velocities
         renderer.setColor(0, 0, 128);
         foreach (i; 0 .. world.last_ent) {
-            foreach (k; 0 .. 4) {
+            foreach (k; 0 .. world.veclen) {
                 auto x = world.xs[i].array[k] + world.vxs[i].array[k];
                 auto y = world.ys[i].array[k] + world.vys[i].array[k];
                 if (0 < x && x < width &&
@@ -68,7 +68,7 @@ void main() {
         // Draw positions
         renderer.setColor(255, 255, 255);
         foreach (i; 0 .. world.last_ent) {
-            foreach (k; 0 .. 4) {
+            foreach (k; 0 .. world.veclen) {
                 auto x = world.xs[i].array[k];
                 auto y = world.ys[i].array[k];
                 if (0 < x && x < width &&

@@ -9,15 +9,16 @@ import core.simd;
 struct World {
     static const float G = 2000f;
     static const int n_ents = 1 << 10;
+    static const int veclen = 4;
     int last_ent = 0;
     int last_ent_sub = 0;
-    float4[n_ents / 4] xs;
-    float4[n_ents / 4] ys;
-    float4[n_ents / 4] vxs;
-    float4[n_ents / 4] vys;
-    float4[n_ents / 4] axs;
-    float4[n_ents / 4] ays;
-    float4[n_ents / 4] masses;
+    float4[n_ents / veclen] xs;
+    float4[n_ents / veclen] ys;
+    float4[n_ents / veclen] vxs;
+    float4[n_ents / veclen] vys;
+    float4[n_ents / veclen] axs;
+    float4[n_ents / veclen] ays;
+    float4[n_ents / veclen] masses;
 
     void step(float timestep = 1.0) {
         // Step everything
@@ -27,7 +28,7 @@ struct World {
             foreach (o; 0 .. last_ent) {
                 auto dx = xs[o] - xs[i];
                 auto dy = ys[o] - ys[i];
-                foreach (k; 0 .. 4) {
+                foreach (k; 0 .. veclen) {
                     auto len = sqrt(dx.array[k] * dx.array[k] + dy.array[k] * dy.array[k]);
                     if (len != 0) {
                         auto dirx = dx.array[k] / len;
@@ -38,7 +39,7 @@ struct World {
                 }
             }
             float4 ts;
-            foreach (k; 0 .. 4) {
+            foreach (k; 0 .. veclen) {
                 ts.array[k] = timestep;
             }
             vxs[i] += axs[i] * ts;
@@ -61,7 +62,7 @@ struct World {
         this.ays[last_ent].array[last_ent_sub] = ay;
         this.masses[last_ent].array[last_ent_sub] = mass;
         ++last_ent_sub;
-        if (last_ent_sub == 4) {
+        if (last_ent_sub == veclen) {
             last_ent_sub = 0;
             ++last_ent;
         }
