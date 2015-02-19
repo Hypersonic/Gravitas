@@ -26,19 +26,48 @@ void main() {
 
     bool running = true;
     World world;
-    foreach (i; 0 .. 1000) {
+    foreach (i; 0 .. 10) {
         world.push_ent(uniform(0, width), uniform(0, height), 0, 0, 0, 0, uniform(1, 10));
     }
     while (running) {
         sdl2.processEvents();
 
+        // Draw accelerations
+        renderer.setColor(128, 0, 0);
+        foreach (i; 0 .. world.last_ent) {
+            auto x = world.xs[i] + world.vxs[i] + world.axs[i];
+            auto y = world.ys[i] + world.vys[i] + world.ays[i];
+            if (0 < x && x < width &&
+                    0 < y && y < height) {
+                renderer.drawLine(
+                        (world.xs[i] + world.vxs[i]).to!int,
+                        (world.ys[i] + world.vys[i]).to!int,
+                        x.to!int, y.to!int);
+            }
+        }
+
+        // Draw velocities
+        renderer.setColor(0, 0, 128);
+        foreach (i; 0 .. world.last_ent) {
+            auto x = world.xs[i] + world.vxs[i];
+            auto y = world.ys[i] + world.vys[i];
+            if (0 < x && x < width &&
+                    0 < y && y < height) {
+                renderer.drawLine(
+                        world.xs[i].to!int,
+                        world.ys[i].to!int,
+                        x.to!int, y.to!int);
+            }
+        }
+
+        // Draw positions
         renderer.setColor(255, 255, 255);
         foreach (i; 0 .. world.last_ent) {
             auto x = world.xs[i];
             auto y = world.ys[i];
             if (0 < x && x < width &&
                 0 < y && y < height) {
-                renderer.drawPoint(world.xs[i].to!int, world.ys[i].to!int);
+                renderer.drawPoint(x.to!int, y.to!int);
             }
         }
         world.step(.01);
