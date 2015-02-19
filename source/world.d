@@ -5,7 +5,7 @@ import std.math;
 import core.simd;
 
 struct World {
-    static const float G = 2f;
+    static const float G = 2000f;
     static const int n_ents = 1 << 10;
     int last_ent = 0;
     float[n_ents] xs;
