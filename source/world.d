@@ -28,8 +28,8 @@ struct World {
                 if (len != 0) {
                     auto dirx = dx / len;
                     auto diry = dy / len;
-                    axs[i] += dirx * G * (masses[i] * masses[o]) / (len * len);
-                    ays[i] += diry * G * (masses[i] * masses[o]) / (len * len);
+                    axs[i] += dirx * G * (masses[o]) / (len * len);
+                    ays[i] += diry * G * (masses[o]) / (len * len);
                 }
             }
             vxs[i] += axs[i] * timestep;
