@@ -1,6 +1,8 @@
 module gravitas.world;
 
 import std.math;
+import std.range;
+import std.parallelism;
 
 import core.simd;
 
@@ -18,7 +20,7 @@ struct World {
 
     void step(float timestep = 1.0) {
         // Step everything
-        foreach (i; 0 .. last_ent) {
+        foreach (i; iota(0, last_ent).parallel) {
             axs[i] = 0;
             ays[i] = 0;
             foreach (o; 0 .. last_ent) {
