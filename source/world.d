@@ -30,10 +30,14 @@ struct World {
                 if (i == o) continue; // skip when we're looking at the same thing
                 auto dx = xs[o] - xs[i];
                 auto dy = ys[o] - ys[i];
+
+                // compute lengths
                 vecType lens;
+                auto sqsums = dx * dx + dy * dy;
                 foreach (k; iota(0, veclen)) {
-                    lens.array[k] = sqrt(dx.array[k] * dx.array[k] + dy.array[k] * dy.array[k]);
+                    lens.array[k] = sqrt(sqsums.array[k]);
                 }
+
                 auto dirx = dx / lens;
                 auto diry = dy / lens;
                 axs[i] += dirx * G * (masses[o]) / (lens * lens);
