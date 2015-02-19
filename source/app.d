@@ -71,9 +71,10 @@ void main() {
             foreach (k; 0 .. world.veclen) {
                 auto x = world.xs[i].array[k];
                 auto y = world.ys[i].array[k];
+                auto mass = world.masses[i].array[k] / 5;
                 if (0 < x && x < width &&
                         0 < y && y < height) {
-                    renderer.drawPoint(x.to!int, y.to!int);
+                    renderer.fillRect((x - mass/2).to!int, (y - mass/2).to!int, mass.to!int, mass.to!int);
                 }
             }
         }
