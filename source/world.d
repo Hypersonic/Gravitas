@@ -10,13 +10,14 @@ struct World {
     static const float G = 2000f;
     static const int n_ents = 1 << 10;
     int last_ent = 0;
-    float[n_ents] xs;
-    float[n_ents] ys;
-    float[n_ents] vxs;
-    float[n_ents] vys;
-    float[n_ents] axs;
-    float[n_ents] ays;
-    float[n_ents] masses;
+    int last_ent_sub = 0;
+    float4[n_ents / 4] xs;
+    float4[n_ents / 4] ys;
+    float4[n_ents / 4] vxs;
+    float4[n_ents / 4] vys;
+    float4[n_ents / 4] axs;
+    float4[n_ents / 4] ays;
+    float4[n_ents / 4] masses;
 
     void step(float timestep = 1.0) {
         // Step everything
@@ -26,18 +27,24 @@ struct World {
             foreach (o; 0 .. last_ent) {
                 auto dx = xs[o] - xs[i];
                 auto dy = ys[o] - ys[i];
-                auto len = sqrt(dx * dx + dy * dy);
-                if (len != 0) {
-                    auto dirx = dx / len;
-                    auto diry = dy / len;
-                    axs[i] += dirx * G * (masses[o]) / (len * len);
-                    ays[i] += diry * G * (masses[o]) / (len * len);
+                foreach (k; 0 .. 4) {
+                    auto len = sqrt(dx.array[k] * dx.array[k] + dy.array[k] * dy.array[k]);
+                    if (len != 0) {
+                        auto dirx = dx.array[k] / len;
+                        auto diry = dy.array[k] / len;
+                        axs[i].array[k] += dirx * G * (masses[o].array[k]) / (len * len);
+                        ays[i].array[k] += diry * G * (masses[o].array[k]) / (len * len);
+                    }
                 }
             }
-            vxs[i] += axs[i] * timestep;
-            vys[i] += ays[i] * timestep;
-            xs[i] += vxs[i] * timestep;
-            ys[i] += vys[i] * timestep;
+            float4 ts;
+            foreach (k; 0 .. 4) {
+                ts.array[k] = timestep;
+            }
+            vxs[i] += axs[i] * ts;
+            vys[i] += ays[i] * ts;
+            xs[i] += vxs[i] * ts;
+            ys[i] += vys[i] * ts;
         }
     }
 
@@ -46,13 +53,17 @@ struct World {
             float vx, float vy,
             float ax, float ay,
             float mass) {
-        this.xs[last_ent] = x;
-        this.ys[last_ent] = y;
-        this.vxs[last_ent] = vx;
-        this.vys[last_ent] = vy;
-        this.axs[last_ent] = ax;
-        this.ays[last_ent] = ay;
-        this.masses[last_ent] = mass;
-        ++last_ent;
+        this.xs[last_ent].array[last_ent_sub] = x;
+        this.ys[last_ent].array[last_ent_sub] = y;
+        this.vxs[last_ent].array[last_ent_sub] = vx;
+        this.vys[last_ent].array[last_ent_sub] = vy;
+        this.axs[last_ent].array[last_ent_sub] = ax;
+        this.ays[last_ent].array[last_ent_sub] = ay;
+        this.masses[last_ent].array[last_ent_sub] = mass;
+        ++last_ent_sub;
+        if (last_ent_sub == 4) {
+            last_ent_sub = 0;
+            ++last_ent;
+        }
     }
 }
