@@ -1,8 +1,9 @@
 {
 	"name": "gravitas",
-	"description": "A minimal D application.",
-	"copyright": "Copyright © 2015, josh",
-	"authors": ["josh"],
+	"description": "Gravity.",
+	"copyright": "Copyright © 2015, Hypersonic",
+	"authors": ["Hypersonic"],
 	"dependencies": {
+        "gfm": "~>2.0.11"
 	}
 }
