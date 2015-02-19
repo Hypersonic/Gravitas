@@ -5,7 +5,8 @@ import std.math;
 import core.simd;
 
 struct World {
-    static const int n_ents = 1024;
+    static const float G = 2f;
+    static const int n_ents = 1 << 10;
     int last_ent = 0;
     float[n_ents] xs;
     float[n_ents] ys;
@@ -25,10 +26,8 @@ struct World {
                 if (len != 0) {
                     auto dirx = dx / len;
                     auto diry = dy / len;
-                    axs[i] += dirx * (masses[i] * masses[o]) / (len * len);
-                    ays[i] += diry * (masses[i] * masses[o]) / (len * len);
-                    if (axs[i] > 10000) axs[i] = 10000;
-                    if (ays[i] > 10000) ays[i] = 10000;
+                    axs[i] += dirx * G * (masses[i] * masses[o]) / (len * len);
+                    ays[i] += diry * G * (masses[i] * masses[o]) / (len * len);
                 }
             }
             vxs[i] += axs[i] * timestep;
