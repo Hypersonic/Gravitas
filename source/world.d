@@ -27,17 +27,17 @@ struct World {
             axs[i] = 0;
             ays[i] = 0;
             foreach (o; 0 .. last_ent) {
+                if (i == o) continue; // skip when we're looking at the same thing
                 auto dx = xs[o] - xs[i];
                 auto dy = ys[o] - ys[i];
+                vecType lens;
                 foreach (k; iota(0, veclen)) {
-                    auto len = sqrt(dx.array[k] * dx.array[k] + dy.array[k] * dy.array[k]);
-                    if (len != 0) {
-                        auto dirx = dx.array[k] / len;
-                        auto diry = dy.array[k] / len;
-                        axs[i].array[k] += dirx * G * (masses[o].array[k]) / (len * len);
-                        ays[i].array[k] += diry * G * (masses[o].array[k]) / (len * len);
-                    }
+                    lens.array[k] = sqrt(dx.array[k] * dx.array[k] + dy.array[k] * dy.array[k]);
                 }
+                auto dirx = dx / lens;
+                auto diry = dy / lens;
+                axs[i] += dirx * G * (masses[o]) / (lens * lens);
+                ays[i] += diry * G * (masses[o]) / (lens * lens);
             }
             vecType ts;
             foreach (k; 0 .. veclen) {
