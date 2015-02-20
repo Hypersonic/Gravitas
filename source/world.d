@@ -25,25 +25,58 @@ struct World {
 
     void step(float timestep = 1.0) {
         // Step everything
-        foreach (i; iota(0, last_ent).parallel) {
+        foreach (i; iota(0, last_ent + 1).parallel) {
             axs[i] = 0;
             ays[i] = 0;
-            foreach (o; 0 .. last_ent) {
-                if (i == o) continue; // skip when we're looking at the same thing
-                auto dx = xs[o] - xs[i];
-                auto dy = ys[o] - ys[i];
+            foreach (o; 0 .. last_ent + 1) {
+                foreach (j; iota(0, veclen)) {
+                    foreach(k; iota(0, veclen)) {
+                        if (i == o && j == k) continue; // skip when we're looking at the same thing
+                        import std.stdio;
+                        auto dx = xs[o].array[k] - xs[i].array[j];
+                        auto dy = ys[o].array[k] - ys[i].array[j];
 
-                // compute lengths
-                vecType lens;
-                auto sqsums = dx * dx + dy * dy;
-                foreach (k; iota(0, veclen)) {
-                    lens.array[k] = sqrt(sqsums.array[k]);
+                        //writeln(ys[o].array[k]);
+                        //writeln(dx, dy);
+                        // compute lengths
+                        auto len = 0f;
+                        auto sqsum = dx * dx + dy * dy;
+                        len = sqrt(sqsum);
+
+                        auto maxdist = masses[o].array[k] / 8;
+                        if (len < maxdist) {
+                            bool firstbigger = masses[i].array[j] > masses[o].array[k];
+
+                            auto bigger_f = firstbigger ? i : o;
+                            auto bigger_s = firstbigger ? j : k;
+
+                            auto smaller_f = firstbigger ? o : i;
+                            auto smaller_s = firstbigger ? k : j;
+
+                            // Combine velocities
+                            auto mass_ratio = masses[smaller_f].array[smaller_s] / masses[bigger_f].array[bigger_s];
+                            vxs[bigger_f].array[bigger_s] += vxs[smaller_f].array[smaller_s] * mass_ratio;
+                            vys[bigger_f].array[bigger_s] += vys[smaller_f].array[smaller_s] * mass_ratio;
+
+                            // Move mass from smaller to bigger
+                            masses[bigger_f].array[bigger_s] += masses[smaller_f].array[smaller_s];
+                            masses[smaller_f].array[smaller_s] = 0;
+                            
+                            // Get rid of smaller
+                            xs[smaller_f].array[smaller_s] = -100000000;
+                            ys[smaller_f].array[smaller_s] = -100000000;
+                            vxs[smaller_f].array[smaller_s] = 0;
+                            vys[smaller_f].array[smaller_s] = 0;
+                            axs[smaller_f].array[smaller_s] = 0;
+                            ays[smaller_f].array[smaller_s] = 0;
+                        } else if (len != 0) {
+                            auto dirx = dx / len;
+                            auto diry = dy / len;
+                            axs[i].array[j] += dirx * G * (masses[o].array[k]) / (len * len);
+                            ays[i].array[j] += diry * G * (masses[o].array[k]) / (len * len);
+                        }
+                    }
                 }
-
-                auto dirx = dx / lens;
-                auto diry = dy / lens;
-                axs[i] += dirx * G * (masses[o]) / (lens * lens);
-                ays[i] += diry * G * (masses[o]) / (lens * lens);
             }
             vecType ts;
             foreach (k; 0 .. veclen) {
@@ -72,6 +105,13 @@ struct World {
         if (last_ent_sub == veclen) {
             last_ent_sub = 0;
             ++last_ent;
+            this.xs[last_ent] = 0;
+            this.ys[last_ent] = 0;
+            this.vxs[last_ent] = 0;
+            this.vys[last_ent] = 0;
+            this.axs[last_ent] = 0;
+            this.ays[last_ent] = 0;
+            this.masses[last_ent] = 0;
         }
     }
 }
