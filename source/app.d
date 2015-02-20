@@ -30,7 +30,7 @@ void main() {
     bool draw_acc = true;
     bool running = true;
     World world;
-    foreach (i; 0 .. 1024) {
+    foreach (i; 0 .. 256) {
         auto vx = uniform(-10, 10);
         auto vy = uniform(-10, 10);
         auto vz = uniform(-10, 10);
