@@ -13,6 +13,7 @@ import gravitas.world;
 void main() {
     int width = 1000;
     int height = 1000;
+    int depth = 1000;
 
     // load dynamic libraries
     auto sdl2 = scoped!SDL2(null);
@@ -28,7 +29,7 @@ void main() {
     bool running = true;
     World world;
     foreach (i; 0 .. 128) {
-        world.push_ent(uniform(0, width), uniform(0, height), 0, 0, 0, 0, uniform(1, 20));
+        world.push_ent(uniform(0, width), uniform(0, height), uniform(0, depth), 0, 0, 0, 0, 0, 0, uniform(1, 20));
     }
     while (running) {
         sdl2.processEvents();

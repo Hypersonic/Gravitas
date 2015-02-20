@@ -101,19 +101,19 @@ struct World {
     }
 
     void push_ent(
-            float x, float y,
-            float vx, float vy,
-            float ax, float ay,
+            float x, float y, float z,
+            float vx, float vy, float vz,
+            float ax, float ay, float az,
             float mass) {
         this.xs[last_ent].array[last_ent_sub] = x;
         this.ys[last_ent].array[last_ent_sub] = y;
-        this.zs[last_ent].array[last_ent_sub] = 0;
+        this.zs[last_ent].array[last_ent_sub] = z;
         this.vxs[last_ent].array[last_ent_sub] = vx;
         this.vys[last_ent].array[last_ent_sub] = vy;
-        this.vzs[last_ent].array[last_ent_sub] = 0;
+        this.vzs[last_ent].array[last_ent_sub] = vz;
         this.axs[last_ent].array[last_ent_sub] = ax;
         this.ays[last_ent].array[last_ent_sub] = ay;
-        this.azs[last_ent].array[last_ent_sub] = 0;
+        this.azs[last_ent].array[last_ent_sub] = az;
         this.masses[last_ent].array[last_ent_sub] = mass;
         ++last_ent_sub;
         if (last_ent_sub == veclen) {
