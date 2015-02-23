@@ -10,9 +10,9 @@ struct World {
     static const float G = 2000f;
     static const int n_ents = 1 << 11;
     static const int veclen = 4;
+    alias vecType = float4;
     // We need to have this be an evenly divisible amount
     static assert (n_ents % veclen == 0, "world.n_ents is not divisible by world.veclen");
-    alias vecType = float4;
     int last_ent = 0;
     int last_ent_sub = 0;
     vecType[n_ents / veclen] xs;
