@@ -96,7 +96,7 @@ void main() {
         sw.reset();
         sw.start();
         world.step(.01);
-        sw.stop()
+        sw.stop();
         writeln("Simulation took: ", sw.peek().usecs, " usecs");
         sw.reset();
 
