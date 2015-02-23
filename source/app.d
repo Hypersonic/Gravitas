@@ -2,6 +2,7 @@ import std.stdio;
 import std.typecons;
 import std.conv;
 import std.random;
+import std.datetime;
 
 import core.simd;
 
@@ -36,9 +37,11 @@ void main() {
         auto vz = uniform(-10, 10);
         world.push_ent(uniform(0, width), uniform(0, height), uniform(0, depth), vx, vy, vz, 0, 0, 0, uniform(1, 20));
     }
+    StopWatch sw;
     while (running) {
         sdl2.processEvents();
 
+        sw.start();
         if (draw_acc) {
             // Draw accelerations
             renderer.setColor(128, 0, 0);
@@ -88,7 +91,14 @@ void main() {
                 }
             }
         }
+        sw.stop();
+        writeln("Drawing took: ", sw.peek().usecs, " usecs");
+        sw.reset();
+        sw.start();
         world.step(.01);
+        sw.stop()
+        writeln("Simulation took: ", sw.peek().usecs, " usecs");
+        sw.reset();
 
         renderer.present();
         renderer.setColor(0, 0, 0, 0);
