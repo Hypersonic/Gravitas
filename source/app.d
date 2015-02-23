@@ -3,6 +3,7 @@ import std.typecons;
 import std.conv;
 import std.random;
 import std.datetime;
+import std.string;
 
 import core.simd;
 
@@ -23,7 +24,7 @@ void main() {
     auto window = scoped!SDL2Window(sdl2, 
                                     SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                                     width, height,
-                                    SDL_WINDOW_BORDERLESS);
+                                    SDL_WINDOW_SHOWN);
 
     auto renderer = scoped!SDL2Renderer(window);
 
@@ -97,14 +98,12 @@ void main() {
         sw.stop();
         auto render_time = sw.peek().usecs;
         total_render_time += render_time;
-        writeln("Drawing took: ", render_time, " usecs");
         sw.reset();
         sw.start();
         world.step(.01);
         sw.stop();
         auto sim_time = sw.peek().usecs;
         total_sim_time += sim_time;
-        writeln("Simulation took: ", sim_time, " usecs");
         sw.reset();
         ++times_recorded;
 
@@ -124,5 +123,10 @@ void main() {
         if (sdl2.keyboard().isPressed(SDLK_v)) {
             draw_vel = !draw_vel;
         }
+
+        // Set the window title to the sim time for this frame plus the averate sim time
+        window.setTitle(format("Sim time: %d (this frame), %d (avg)", sim_time, total_sim_time / times_recorded));
     }
+    writeln("Avg. Draw Time: ", total_render_time / times_recorded, "usecs");
+    writeln("Avg. Sim  Time: ", total_sim_time / times_recorded, "usecs");
 }
