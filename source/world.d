@@ -36,7 +36,6 @@ struct World {
                 foreach (j; iota(0, veclen)) {
                     foreach(k; iota(0, veclen)) {
                         if (i == o && j == k) continue; // skip when we're looking at the same thing
-                        import std.stdio;
                         auto dx = xs[o].array[k] - xs[i].array[j];
                         auto dy = ys[o].array[k] - ys[i].array[j];
                         auto dz = zs[o].array[k] - zs[i].array[j];
