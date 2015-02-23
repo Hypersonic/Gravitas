@@ -37,6 +37,9 @@ void main() {
         auto vz = uniform(-10, 10);
         world.push_ent(uniform(0, width), uniform(0, height), uniform(0, depth), vx, vy, vz, 0, 0, 0, uniform(1, 20));
     }
+    long total_sim_time = 0;
+    long total_render_time = 0;
+    long times_recorded = 0; 
     StopWatch sw;
     while (running) {
         sdl2.processEvents();
@@ -92,13 +95,18 @@ void main() {
             }
         }
         sw.stop();
-        writeln("Drawing took: ", sw.peek().usecs, " usecs");
+        auto render_time = sw.peek().usecs;
+        total_render_time += render_time;
+        writeln("Drawing took: ", render_time, " usecs");
         sw.reset();
         sw.start();
         world.step(.01);
         sw.stop();
-        writeln("Simulation took: ", sw.peek().usecs, " usecs");
+        auto sim_time = sw.peek().usecs;
+        total_sim_time += sim_time;
+        writeln("Simulation took: ", sim_time, " usecs");
         sw.reset();
+        ++times_recorded;
 
         renderer.present();
         renderer.setColor(0, 0, 0, 0);
