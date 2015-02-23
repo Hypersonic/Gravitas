@@ -61,7 +61,7 @@ struct World {
                             vys[bigger_f].array[bigger_s] += vys[smaller_f].array[smaller_s] * mass_ratio;
                             vzs[bigger_f].array[bigger_s] += vzs[smaller_f].array[smaller_s] * mass_ratio;
 
-                            // Move mass from smaller to bigger (but with a bit lost because why not
+                            // Move mass from smaller to bigger (but with a bit lost because why not)
                             masses[bigger_f].array[bigger_s] += masses[smaller_f].array[smaller_s] / 2;
                             masses[smaller_f].array[smaller_s] = 0;
                             
