@@ -27,6 +27,11 @@ struct World {
     vecType[n_ents / veclen] masses;
 
     void step(float timestep = 1.0) {
+        // Assemble a ts array so we can multiply by it later
+        vecType ts;
+        foreach (k; 0 .. veclen) {
+            ts.array[k] = timestep;
+        }
         // Step everything
         foreach (i; iota(0, last_ent + 1).parallel) {
             axs[i] = 0;
@@ -85,10 +90,6 @@ struct World {
                         }
                     }
                 }
-            }
-            vecType ts;
-            foreach (k; 0 .. veclen) {
-                ts.array[k] = timestep;
             }
             vxs[i] += axs[i] * ts;
             vys[i] += ays[i] * ts;
